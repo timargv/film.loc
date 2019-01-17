@@ -350,5 +350,5 @@ $(function () {
 
     setup()
 
-    $('[data-toggle="tooltip"]').tooltip()
+
 })

@@ -41,6 +41,27 @@ class Film extends Model
     protected $dates = ['premiere', 'created_at', 'updated_at'];
 
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        Film::deleted(function ($film) {
+            $film->genres()->detach();
+            $film->casts()->detach();
+            $film->directors()->detach();
+            $film->scriptwriters()->detach();
+            $film->producers()->detach();
+            $film->operators()->detach();
+            $film->composers()->detach();
+            $film->painters()->detach();
+            $film->years()->detach();
+            $film->editors()->detach();
+
+//            $film->removePoster();
+        });
+    }
+
+
     // Все Картинки
     public function images()
     {
@@ -104,57 +125,21 @@ class Film extends Model
     //========================================
 
 
-
-
-
-
-
-    //-------------------------------------
-    public static function getFilm($id)
+    //------------------- Массовое добавление полей
+    public static function add($fields)
     {
-        $Kinopoisk = new Kinopoisk\Client();
-        $kp = $Kinopoisk->getFilmApi();
-        $film = $kp->details($id);
-
-
-
-        return $film;
-    }
-    public static function getFilmSearch($title)
-    {
-        $Kinopoisk = new Kinopoisk\Client();
-        $kp = $Kinopoisk->getSearchApi();
-        $film = $kp->searchFilm($title);
-        return $film;
-    }
-
-    public static function getFilmGenres()
-    {
-        $Kinopoisk = new Kinopoisk\Client();
-        $kp = $Kinopoisk->getMetaApi();
-        $film = $kp->genres();
-
+        $film = new static;
+        $film->fill($fields);
+        $film->save();
         return $film;
     }
 
 
-
-    public static function getKpReatingFile($film_kp_id)
+    //------------------- Добавление в Промежуточную таблицу
+    public function setYears($ids)
     {
-        $rating = file_get_contents('https://rating.kinopoisk.ru/'.$film_kp_id.'.xml');
-        $data = utf8_decode(mb_convert_encoding($rating, "windows-1251", "utf-8"));
-        libxml_use_internal_errors(true);
-//        $html_utf8 = mb_convert_encoding($rating, "utf-8", "windows-1251");
-//        $html_utf8 = str_replace(array("\r\n", "\n"), null, $data);
-//        dd($html_utf8);
-//        $fileContents = str_replace(array("\n", "\r", "\t"), '', $rating);
-        $fileContents = trim(str_replace('"', "'", $rating));
-
-
-        $xml = simplexml_load_string($data);
-        $json = json_encode($xml);
-        $data = json_decode($json,TRUE);
-        return $data;
+        if ($ids === null) { return; }
+        $this->years()->sync($ids);
     }
 
 }

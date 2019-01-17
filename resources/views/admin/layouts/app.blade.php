@@ -177,7 +177,7 @@
                     </li>
                     <!-- Control Sidebar Toggle Button -->
                     <li>
-                        <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                        <a href="#" data-toggle="control-sidebar"><i class="fal fa-cog"></i></a>
                     </li>
                 </ul>
             </div>
@@ -248,9 +248,9 @@
     <aside class="control-sidebar control-sidebar-dark">
         <!-- Create the tabs -->
         <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
-            <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+            <li><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="far fa-home"></i></a></li>
 
-            <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+            <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="far fa-cog"></i></a></li>
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
@@ -442,7 +442,8 @@
 <!-- ./wrapper -->
 
 <!-- Scripts -->
-<script src="{{ mix('js/admin.js') }}" defer></script>
+{{--<script src="{{ mix('js/admin.js') }}" defer></script>--}}
+<script src="/js/admin.js"></script>
 
 </body>
 </html>

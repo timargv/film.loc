@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin\Film;
 
 use App\Entity\Film\Film;
+use App\Entity\Film\Person;
+use App\Entity\Film\Year;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -11,21 +13,34 @@ class FilmsController extends Controller
 
     public function index()
     {
-        $films = Film::orderBy('created_at', 'desc')->paginate(15);;
-        return view('admin.films.index', compact('films'));
+        $films = Film::orderBy('id','desc')->paginate(15);
+        $persons = Person::all();
+        return view('admin.films.index', compact('films', 'persons'));
     }
 
 
     public function create()
     {
         //
-        return view('admin.films.create');
+        $persons = Person::all();
+        $years = Year::all();
+
+        return view('admin.films.create', compact('persons', 'years'));
     }
 
 
     public function store(Request $request)
     {
         //
+        $this->validate($request, [
+            'title' => 'required',
+        ]);
+
+        $film = Film::add($request->all());
+        $film->setYears($request->get('years'));
+
+        return redirect()->route('admin.films.index');
+
     }
 
 
@@ -47,8 +62,9 @@ class FilmsController extends Controller
     }
 
 
-    public function destroy(Film $film)
+    public function destroy($film)
     {
-        //
+        Film::findOrFail($film)->delete();
+        return redirect()->back();
     }
 }

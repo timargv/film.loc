@@ -19,7 +19,7 @@
                 <div class="box-header">
 
                 </div>
-                {{ Form::open(['route' => 'carers.store']) }}
+                {{ Form::open(['route' => 'film.carers.store']) }}
 
                 <div class=" box-body ">
 
@@ -27,7 +27,7 @@
 
                         <div class="">
 
-                            @include('admin.errors')
+
                             <div class="clearfix row">
                                 <div class="col-xs-6">
                                     <label>Профессия</label>

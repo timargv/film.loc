@@ -1,98 +1,69 @@
-@extends('admin.layout')
+@extends('admin.layouts.app')
+
+@section('title', 'Года')
 
 @section('content')
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <h1>
-                Года
-                <small>приятные слова..</small>
-            </h1>
-        </section>
 
-        <!-- Main content -->
-        <section class="content">
-           
-
-            <div class="box">
-                
-                
-
-                <div class="box-header clearfix">
-
-                    <div class="pull-left">
-                        <a class="btn btn-primary btn-sm" href="{{ route('years.create') }}"><i class="fa fa-plus"></i> &nbsp; Добавить</a>
-                        <a class="btn btn-default btn-sm" href="{{ route('years.export') }}"><i class="fa fa-download"></i> &nbsp; Export</a>
-                    </div>
-
-                    {{ Form::open(['route' => 'years.store', 'class' => 'form-inline ']) }}
-
-                        <div class="clearfix pull-right">
-                            <div class="form-group">
-
-                                <div class="input-group ">
-                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                    <input name="year" type="text" class="form-control" placeholder="Профессия" value="{{ old('year') }}"></div>
-                            </div>
-                            <div class="form-group">
-                                    <button  class="btn btn-primary"><i class="fa fa-plus"></i></button>                                
-                            </div>
-                            @include('admin.errors')
-
-                        </div>
-
-                    {{ Form::close() }}
-                </div>
-
-                
-
-
-                <div class=" box-body table-responsive no-padding mailbox-messages">
-                    <table class="table table-hover">
-                        <thead>
-
-                        </thead>
-                        <tbody>
-                        <tr>
-
-                            <th style="width: 50px;padding-left: 15px;">ID</th>
-                            <th>Год</th>
-
-                            <th></th>
-                        </tr>
-                        @foreach($years as $year)
-                            <tr>
-
-                                <td style="padding-left: 15px;">{{ $year->id }}</td>
-                                <td><a href="{{ route('years.show', $year->slug)}}">{{ $year->year }}</a></td>
-
-                                <td width="150px">
-                                    <div class="form-inline">
-                                        <a class="form-inline" href="{{ route('years.edit', $year->id) }}">ред.</a>
-                                        {{ Form::open(['route' => ['years.destroy', $year->id], 'method' => 'delete', 'class' => 'form-group']) }}
-                                        <button onclick="return confirm('Удалить?')" class="btn btn-link btn-xs">удалить</button>
-                                        {{ Form::close() }}
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach    
- 
-                        </tbody>
-                    </table>
-                </div>
-
-
-                <div class="box-footer clearfix">
-                     {{$years->links()}}
+    <div class="box">
+            <div class="box-header clearfix">
+                <div class="pull-left">
+                    <a class="btn btn-primary btn-sm" href="{{ route('admin.years.create') }}"><i class="fas fa-plus"></i></a>
                 </div>
             </div>
 
-        </section>
-        <!-- /.content -->
-    </div>
-    <!-- /.content-wrapper -->
+            <div class=" box-body table-responsive no-padding mailbox-messages">
+                <table class="table table-hover">
+                    <thead>
 
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th style="width: 50px;padding-left: 15px;">ID</th>
+                        <th>Год</th>
+                        <th class="border-right"></th>
+                        <th style="width: 50px;padding-left: 15px;">ID</th>
+                        <th>Год</th>
+                        <th class="border-right"></th>
+                        <th style="width: 50px;padding-left: 15px;">ID</th>
+                        <th>Год</th>
+                        <th class="border-right"></th>
+                        <th style="width: 50px;padding-left: 15px;">ID</th>
+                        <th>Год</th>
+                        <th class="border-right"></th>
+                        <th style="width: 50px;padding-left: 15px;">ID</th>
+                        <th>Год</th>
+                        <th class="border-right"></th>
+                    </tr>
+                    @foreach ($years->chunk(5) as $chunk)
+                        <tr>
+                            @foreach($chunk as $year)
 
+                            <td style="padding-left: 15px;">{{ $year->id }}</td>
+                            <td><a href="{{ route('admin.years.show', $year)}}">{{ $year->name }}</a></td>
+
+                            <td width="150px" class="border-right">
+                                <div class="clearfix pr-3">
+
+                                    <form action="{{ route('admin.years.destroy', $year) }}" class="pull-right" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button onclick="return confirm('Удалить?')" class="btn btn-link btn-xs"><i class="far fa-trash-alt text-muted"></i></button>
+                                    </form>
+                                    <a class="pull-right mr-3 text-muted" href="{{ route('admin.years.edit', $year) }}"><i class="far fa-edit"></i></a>
+
+                                </div>
+                            </td>
+                            @endforeach
+                        </tr>
+                    @endforeach
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="box-footer clearfix">
+                {{$years->links()}}
+            </div>
+        </div>
 
 @endsection
